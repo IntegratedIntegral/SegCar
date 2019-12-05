@@ -40,7 +40,7 @@ void setup() {
   pinMode(PWM_2 ,OUTPUT);
 
   digitalWrite(CHANNEL_1_FORWARD,HIGH);
-  digitalWrite(CHANNEL_2_BACKWARD,HIGH);
+  digitalWrite(CHANNEL_2_FORWARD,HIGH);
 }
 
 void loop() {
@@ -65,12 +65,16 @@ void loop() {
 void setDriveDirection(Direction dir){
   switch(dir){
     case FORWARD:
-      pinMode(CHANNEL_1_FORWARD,OUTPUT);
-      pinMode(CHANNEL_1_BACKWARD,OUTPUT);
+      digitalWrite(CHANNEL_1_FORWARD,HIGH);
+      digitalWrite(CHANNEL_2_FORWARD,HIGH);
+      digitalWrite(CHANNEL_1_BACKWARD,LOW);
+      digitalWrite(CHANNEL_2_BACKWARD,LOW);
       break;
     case BACKWARD:
-      pinMode(CHANNEL_2_FORWARD,OUTPUT);
-      pinMode(CHANNEL_2_BACKWARD,OUTPUT);
+      digitalWrite(CHANNEL_1_BACKWARD,HIGH);
+      digitalWrite(CHANNEL_2_BACKWARD,HIGH);
+      digitalWrite(CHANNEL_1_FORWARD,LOW);
+      digitalWrite(CHANNEL_2_FORWARD,LOW);
       break;
   }
 }
