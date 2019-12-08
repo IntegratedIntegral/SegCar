@@ -1,12 +1,18 @@
 #include "MPU9250.h"
+#include <Servo.h>
 
 #define MIN_PWM 85.0
 #define CHANNEL_1_FORWARD 7
-#define CHANNEL_1_BACKWARD 8
-#define CHANNEL_2_FORWARD 2
-#define CHANNEL_2_BACKWARD 4
+#define CHANNEL_1_BACKWARD 2
+#define CHANNEL_2_FORWARD 4
+#define CHANNEL_2_BACKWARD 8
 #define PWM_1 5
 #define PWM_2 6
+
+#define SERVO 3
+#define POSITION_FWD 0
+#define POSTION_MID 90
+#define POSITON_BWD 180
 
 enum Direction{
   FORWARD,
@@ -14,6 +20,7 @@ enum Direction{
 };
 
 MPU9250 imu(Wire,0x68);
+Servo dir_servo();
 
 int speed = 0;
 float data = 0.0;
@@ -23,6 +30,7 @@ void setDriveDirection(Direction);
 void setup() {
 
   Serial.begin(9600);
+  dir_servo.attach(SERVO);
 
   imu.setAccelRange(MPU9250::ACCEL_RANGE_2G);
   if(imu.begin() < 0){
@@ -55,7 +63,7 @@ void loop() {
   }
 
   speed = abs(data)/10.0 * (255.0 - MIN_PWM) + MIN_PWM;
-
+  //speed = 255;
   Serial.println(speed);
   
   analogWrite(PWM_1,speed);
