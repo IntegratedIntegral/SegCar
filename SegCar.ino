@@ -1,7 +1,9 @@
 #include "MPU9250.h"
 #include <Servo.h>
 
-#define MIN_PWM 85.0
+#define MIN_PWM 105.0
+#define VEL_COEFFICIENT 355.0
+
 #define CHANNEL_1_FORWARD 8
 #define CHANNEL_1_BACKWARD 4
 #define CHANNEL_2_FORWARD 7
@@ -62,12 +64,17 @@ void loop() {
     setDriveDirection(Direction::BACKWARD);
   }
 
-  speed = abs(data)/10.0 * (255.0 - MIN_PWM) + MIN_PWM;
+  speed = abs(data)/10.0 * (VEL_COEFFICIENT - MIN_PWM) + MIN_PWM;
   //speed = 255;
   Serial.println(speed);
-  
-  analogWrite(PWM_1,speed);
-  analogWrite(PWM_2,speed);
+  if(speed <= 255){
+    analogWrite(PWM_1,speed);
+    analogWrite(PWM_2,speed);
+  }
+  else{
+    analogWrite(PWM_1,255);
+    analogWrite(PWM_2,255);
+  }
 }
 
 void setDriveDirection(Direction dir){
