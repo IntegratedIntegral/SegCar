@@ -1,3 +1,5 @@
+//Created by: Wojciech Boncela
+
 #include "MPU9250.h"
 #include <Servo.h>
 
@@ -65,7 +67,6 @@ void loop() {
   }
 
   speed = abs(data)/10.0 * (VEL_COEFFICIENT - MIN_PWM) + MIN_PWM;
-  //speed = 255;
   Serial.println(speed);
   if(speed <= 255){
     analogWrite(PWM_1,speed);
